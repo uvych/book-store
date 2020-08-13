@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Book store</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{navigation :: navigation(BookStore)}"/>
+
+    <h1>Магазин книг</h1>
+    <br>
+    <h4>Фильтр:</h4>
+    <form th:action="@{'/books'}" method="get">
+        <div class="form-group">
+            <label>Максимальная стоимость</label>
+            <input th:value="${param.maxPrice != null ? param.maxPrice : null}" type="number" class="form-control form-control-sm" name="maxPrice">
+            <label>Минимальная стоимость</label>
+            <input th:value="${param.minPrice != null ? param.minPrice : null}" type="number" class="form-control form-control-sm" name="minPrice">
+            <label>Название</label>
+            <input th:value="${param.titlePart != null ? param.titlePart : null}" type="text" class="form-control form-control-sm" name="titlePart">
+
+            <div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="DETECTIVE" name="genre" id="defaultCheck1">
+                    <label class="form-check-label" for="defaultCheck1">
+                        Детектив
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="FANTASY"  name="genre2" id="defaultCheck2">
+                    <label class="form-check-label" for="defaultCheck2">
+                        Фэнтази
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="SCIENCE_FICTION"  name="genre3" id="defaultCheck3">
+                    <label class="form-check-label" for="defaultCheck3">
+                        Фантастика
+                    </label>
+                </div>
+
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Применить</button>
+    </form>
+    <br>
+    <form th:action="@{'/books'}" method="get">
+        <button type="submit" class="btn btn-primary">Сбросить настройки фильтра</button>
+    </form>
+
+    <br>
+    <br>
+    <h4>Список книг:</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td>Название</td>
+            <td>Описание</td>
+            <td>Цена</td>
+            <td>Год издания</td>
+            <td>Жанр</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="b : ${books}">
+            <td th:text="${b.title}"></td>
+            <td th:text="${b.description}"></td>
+            <td th:text="${b.price}"></td>
+            <td th:text="${b.publishYear}"></td>
+            <td th:text="${b.genre}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <br>
+    <nav aria-label="...">
+        <ul class="pagination">
+            <li th:if="${page.isFirst()}" class="page-item disabled">
+                <a class="page-link"  tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <li th:unless="${page.isFirst()}" class="page-item" >
+                <a class="page-link" th:href="@{'/books?p=' + ${page.getNumber()}}" tabindex="-1" aria-disabled="true">Previous</a>
+            </li>
+            <option th:each="i : ${#numbers.sequence( 1 , page.getTotalPages())}">
+                <li th:if="${page.getNumber() + 1  == i}" class="page-item active" aria-current="page" aria-disabled="true">
+                    <a class="page-link" th:href="@{'/books?p=' + ${i}}" th:text="${i}"></a>
+                </li>
+                <li th:unless="${page.getNumber() + 1 == i}" aria-current="page" aria-disabled="true">
+                    <a class="page-link" th:href="@{'/books?p=' + ${i}}" th:text="${i}"></a>
+                </li>
+            </option>
+
+            <li th:if="${page.isLast()}" class="page-item disabled">
+                <a class="page-link"  tabindex="-1" aria-disabled="true">Next</a>
+            </li>
+            <li th:unless="${page.isLast()}" class="page-item" >
+                <a class="page-link" th:href="@{'/books?p=' + ${page.getNumber() + 2}}" tabindex="-1" aria-disabled="true">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</body>
+</html>
