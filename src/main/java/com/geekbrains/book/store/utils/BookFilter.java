@@ -5,48 +5,43 @@ import com.geekbrains.book.store.entities.Genre;
 import com.geekbrains.book.store.repositories.specifications.BookSpecifications;
 import lombok.Getter;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Getter
 public class BookFilter {
     private Specification<Book> spec;
-    private String filterParams;
     private final List<Specification<Book>> bookSpecifications = new ArrayList<>();
 
-    public BookFilter(Map<String, String> params) {
+    public BookFilter(MultiValueMap<String, String> params) {
         spec = Specification.where(null);
-        if (params.containsKey("maxPrice") && !params.get("maxPrice").isEmpty()) {
-            spec = spec.and(BookSpecifications.priceLesserOrEqualsThan(Integer.parseInt(params.get("maxPrice"))));
+        if (params.containsKey("maxPrice") && !params.get("maxPrice").get(0).isEmpty()) {
+            spec = spec.and(BookSpecifications.priceLesserOrEqualsThan(Integer.parseInt(params.get("maxPrice").get(0))));
         }
-        if (params.containsKey("minPrice") && !params.get("minPrice").isEmpty()) {
-            spec = spec.and(BookSpecifications.priceGreaterOrEqualsThan(Integer.parseInt(params.get("minPrice"))));
+        if (params.containsKey("minPrice") && !params.get("minPrice").get(0).isEmpty()) {
+            spec = spec.and(BookSpecifications.priceGreaterOrEqualsThan(Integer.parseInt(params.get("minPrice").get(0))));
         }
-        if (params.containsKey("titlePart")) {
+        if (params.containsKey("titlePart") && !params.get("titlePart").get(0).isEmpty()) {
             assert spec != null;
-            spec = spec.and(BookSpecifications.titleLike(params.get("titlePart")));
+            spec = spec.and(BookSpecifications.titleLike(params.get("titlePart").get(0)));
         }
         if (params.containsKey("genre")) {
-            bookSpecifications.add(BookSpecifications.genreEqualsThan(Enum.valueOf(Genre.class, params.get("genre"))));
-        }
-        if (params.containsKey("genre2")) {
-            bookSpecifications.add(BookSpecifications.genreEqualsThan(Enum.valueOf(Genre.class, params.get("genre2"))));
-        }
-        if (params.containsKey("genre3")) {
-            bookSpecifications.add(BookSpecifications.genreEqualsThan(Enum.valueOf(Genre.class, params.get("genre3"))));
+            for(String param : params.get("genre")) {
+                bookSpecifications.add(BookSpecifications.genreEqualsThan(Enum.valueOf(Genre.class, param)));
+            }
         }
 
         if (bookSpecifications.size() != 0){
-            Specification<Book> specification = creat(bookSpecifications);
+            Specification<Book> specification = creatOrSpecification(bookSpecifications);
             spec = spec.and(specification);
         }
     }
 
 
-    public Specification<Book> creat (List<Specification<Book>> listSpec) {
+    public Specification<Book> creatOrSpecification (List<Specification<Book>> listSpec) {
         if (listSpec.size() == 1) {
             return listSpec.get(0);
         }
