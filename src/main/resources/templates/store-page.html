@@ -63,6 +63,7 @@
             <td>Цена</td>
             <td>Год издания</td>
             <td>Жанр</td>
+            <td>Действие</td>
         </tr>
         </thead>
         <tbody>
@@ -72,6 +73,9 @@
             <td th:text="${b.price}"></td>
             <td th:text="${b.publishYear}"></td>
             <td th:text="${b.genre}"></td>
+            <td>
+                <a class="btn btn-secondary" >В корзину</a>
+            </td>
         </tr>
         </tbody>
     </table>
