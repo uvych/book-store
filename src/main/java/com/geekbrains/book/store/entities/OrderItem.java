@@ -1,14 +1,33 @@
 package com.geekbrains.book.store.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+import javax.persistence.*;
+
 @Data
+@Entity
+@Table(name = "order_items")
+@NoArgsConstructor
 public class OrderItem {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id")
     private Book book;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
+    @Column(name = "count")
     private Integer count;
-    private Long price;
-    private User user;
+
+    @Column(name = "price")
+    private Integer price;
+
 }

@@ -18,6 +18,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/profile/**").authenticated()
+                .antMatchers("cart/saveOrder").authenticated()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN", "SUPERADMIN")
                 .anyRequest().permitAll()
                 .and()
@@ -26,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/authenticate")
                 .and()
                 .logout().logoutSuccessUrl("/");
+
     }
 
     @Bean

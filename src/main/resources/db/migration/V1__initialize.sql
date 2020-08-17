@@ -45,8 +45,17 @@ insert into books (title, description, price, publish_year, genre) values
 ('LOTR 3', 'Description 10', 600.0, 2001, 'DETECTIVE'),
 ('Hobbit', 'Description 11', 500.0, 2001, 'SCIENCE_FICTION');
 
-create table orders (id_order bigint, id_user bigint ,foreign key (id_order) references orderItem(id), foreign key (id_user) references users(id));
+drop table if exists cascade;
+create table orders (
+                       id           bigserial primary key,
+                       user_id      bigint REFERENCES users(id)
+);
 
-
-
-create table orderItem (id bigserial primary key , id_book bigint , count bigint , price bigint , FOREIGN KEY (id_book) REFERENCES books (id));
+drop table if exists cascade;
+create table order_items(
+                            id           bigserial primary key,
+                            book_id      bigint REFERENCES books (id),
+                            order_id     bigint REFERENCES orders (id) ON UPDATE cascade ON DELETE cascade ,
+                            price        int,
+                            count        int
+);

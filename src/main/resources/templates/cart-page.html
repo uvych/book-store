@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -11,12 +12,34 @@
 </head>
 
 <body>
-<div class="container">
-    <h1>Корзина</h1>
-    <form th:action="@{'/books'}" method="get">
-        <button type="submit" class="btn btn-primary">Назад</button>
-    </form>
+<div th:replace="~{navigation :: navigation(Cart)}"/>
 
-</div>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <td>Товар</td>
+        <td>Количество</td>
+        <td>Цена</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${allOrder}">
+        <td th:text="${order.getKey().getTitle()}"></td>
+        <td th:text="${order.getValue()}"></td>
+        <td th:text="${order.getValue()}*${order.getKey().getPrice()}"></td>
+        <td>
+            <a class="btn btn-secondary" th:href="@{'cart/delete/' + ${order.getKey().getId()}}">Удалить</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+<form th:action="@{'order/saveOrder'}" method="get">
+    <button sec:authorize="isAuthenticated()" th:align="center" type="submit" class="btn btn-primary">Оформить заказ</button>
+    <label sec:authorize="isAnonymous()" >Войдите в профиль</label>
+</form>
+
 </body>
 </html>

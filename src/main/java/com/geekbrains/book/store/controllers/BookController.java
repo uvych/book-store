@@ -1,5 +1,6 @@
 package com.geekbrains.book.store.controllers;
 
+import com.geekbrains.book.store.beans.Cart;
 import com.geekbrains.book.store.entities.Book;
 import com.geekbrains.book.store.services.BookService;
 import com.geekbrains.book.store.utils.BookFilter;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BookController {
     private final BookService bookService;
+    private final Cart cart;
 
     @GetMapping
     public String showAllBooks(Model model,
@@ -31,6 +33,8 @@ public class BookController {
         model.addAttribute("page",page);
         return "store-page";
     }
+
+
 
     // Эта часть кода будет сильно скорректирована после темы Spring REST
     @GetMapping("/rest")
