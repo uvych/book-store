@@ -29,6 +29,9 @@
                 <li sec:authorize="hasAnyRole('ADMIN', 'SUPERADMIN')" class="nav-item" th:classappend="${activeTab == 'Admin' ? 'active' : ''}">
                     <a class="nav-link" th:href="@{'/admin'}">Админ-панель</a>
                 </li>
+                <li sec:authorize="hasAnyRole('ADMIN', 'SUPERADMIN')" class="nav-item" th:classappend="${activeTab == 'History' ? 'active' : ''}">
+                    <a class="nav-link" th:href="@{'/history'}">Мониторинг</a>
+                </li>
 
                 <li sec:authorize="isAnonymous()" class="nav-item">
                     <form class="align-middle" th:action="@{/authenticate}" method="POST">

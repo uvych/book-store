@@ -32,6 +32,4 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
 }

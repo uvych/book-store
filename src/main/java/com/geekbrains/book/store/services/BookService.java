@@ -29,30 +29,23 @@ public class BookService {
         return bookRepository.findAll(spec, PageRequest.of(page, size));
     }
 
-    public String getParamString(MultiValueMap<String, String> mapParam){
-        StringBuilder paramString = new StringBuilder();
-
-        if (mapParam.containsKey("maxPrice") && !mapParam.get("maxPrice").get(0).isEmpty()){
-            paramString.append("&maxPrice=").append(mapParam.get("maxPrice").get(0));
-        }
-
-        if (mapParam.containsKey("minPrice") && !mapParam.get("minPrice").get(0).isEmpty()){
-            paramString.append("&minPrice=").append(mapParam.get("minPrice").get(0));
-        }
-
-        if (mapParam.containsKey("titlePrice") && !mapParam.get("titlePart").get(0).isEmpty()){
-            paramString.append("&titlePart=").append(mapParam.get("titlePart").get(0));
-        }
-
-        if (mapParam.containsKey("genre")) {
-            for(String param : mapParam.get("genre")) {
-                paramString.append("&genre=").append(param);
-            }
-        }
-        return paramString.toString();
+    public Book findById(Long id) {
+        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book with id: " + id + " not found"));
     }
 
-    public Book findById(Long id){
-        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Не найдена кинга"));
+    public Book saveOrUpdate(Book book) {
+        return bookRepository.save(book);
+    }
+
+    public void deleteById(Long id) {
+        bookRepository.deleteById(id);
+    }
+
+    public boolean existsById(Long id) {
+        return bookRepository.existsById(id);
+    }
+
+    public void deleteAll() {
+        bookRepository.deleteAll();
     }
 }

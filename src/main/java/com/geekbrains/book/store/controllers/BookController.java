@@ -1,6 +1,5 @@
 package com.geekbrains.book.store.controllers;
 
-import com.geekbrains.book.store.beans.Cart;
 import com.geekbrains.book.store.entities.Book;
 import com.geekbrains.book.store.services.BookService;
 import com.geekbrains.book.store.utils.BookFilter;
@@ -11,14 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/books")
 @AllArgsConstructor
 public class BookController {
-    private final BookService bookService;
-    private final Cart cart;
+    private BookService bookService;
 
     @GetMapping
     public String showAllBooks(Model model,
@@ -27,20 +23,8 @@ public class BookController {
     ) {
         BookFilter bookFilter = new BookFilter(params);
         Page<Book> page = bookService.findAll(bookFilter.getSpec(), pageIndex - 1, 5);
-        String paramString = bookService.getParamString(params);
-        model.addAttribute("paramString", paramString);
-        model.addAttribute("books", page.getContent());
-        model.addAttribute("page",page);
+        model.addAttribute("booksPage", page);
+        model.addAttribute("filterDef", bookFilter.getFilterParams());
         return "store-page";
-    }
-
-
-
-    // Эта часть кода будет сильно скорректирована после темы Spring REST
-    @GetMapping("/rest")
-    @ResponseBody
-    @CrossOrigin("*")
-    public List<Book> getAllBooks() {
-        return bookService.findAll();
     }
 }

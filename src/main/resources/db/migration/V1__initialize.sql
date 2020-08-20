@@ -29,33 +29,28 @@ values
 ('Bob Johnson', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'bob_johnson@gmail.com'),
 ('John Johnson', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'john_johnson@gmail.com');
 
-insert into users_roles (user_id, role_id) values (1, 1), (1, 3);
+insert into users_roles (user_id, role_id) values (1, 1), (1, 2);
 
-create table books (id bigserial primary key, title varchar(255), description varchar(5000), price numeric(8, 2), publish_year int , genre varchar(255));
-insert into books (title, description, price, publish_year, genre) values
-('Harry Potter 1', 'Description 1', 300.0, 2000, 'FANTASY'),
-('Harry Potter 2', 'Description 2', 400.0, 2001, 'FANTASY'),
-('Harry Potter 3', 'Description 3', 500.0, 2002, 'FANTASY'),
-('Harry Potter 4', 'Description 4', 700.0, 2007, 'FANTASY'),
-('Harry Potter 5', 'Description 5', 440.0, 2004, 'FANTASY'),
-('Harry Potter 6', 'Description 6', 650.0, 2007, 'FANTASY'),
-('Harry Potter 7', 'Description 7', 200.0, 2006, 'FANTASY'),
-('LOTR 1', 'Description 8', 1200.0, 2006, 'DETECTIVE'),
-('LOTR 2', 'Description 9', 900.0, 2004, 'DETECTIVE'),
-('LOTR 3', 'Description 10', 600.0, 2001, 'DETECTIVE'),
-('Hobbit', 'Description 11', 500.0, 2001, 'SCIENCE_FICTION');
+create table books (id bigserial primary key, title varchar(255), description varchar(5000), genre varchar(255), price numeric(8, 2), publish_year int);
+insert into books (title, description, genre, price, publish_year) values
+('Harry Potter: Philosopher''s Stone', 'Description 1', 'FANTASY', 300.0, 2000),
+('Harry Potter: Chamber of Secrets', 'Description 2', 'DETECTIVE', 400.0, 2001),
+('Harry Potter: Prisoner of Azkaban', 'Description 3', 'FANTASY', 500.0, 2002),
+('Harry Potter: Goblet of Fire', 'Description 4', 'DETECTIVE', 700.0, 2007),
+('Harry Potter: Order of the Phoenix', 'Description 5', 'FANTASY', 440.0, 2004),
+('Harry Potter: Half-Blood Price', 'Description 6', 'DETECTIVE', 650.0, 2007),
+('Harry Potter: Deathly Hallows', 'Description 6', 'DETECTIVE', 650.0, 2007),
+('Lockwood & Co.', 'Description 7', 'FANTASY', 200.0, 2006),
+('Neverwhere', 'Description 7', 'FANTASY', 200.0, 2000),
+('Mistborn', 'Description 7', 'FANTASY', 200.0, 2000),
+('Ambers Chronicles', 'Description 17', 'FANTASY', 200.0, 1989),
+('Lord Of The Ring: The Fellowship of the Ring', 'Description 8', 'FANTASY', 1200.0, 2006),
+('Lord Of The Ring: The Two Towers', 'Description 9', 'FANTASY', 900.0, 2004),
+('Lord Of The Ring: The Return of the King', 'Description 10', 'FANTASY', 600.0, 2001),
+('Hobbit', 'Description 11', 'FICTION', 500.0, 2001);
 
-drop table if exists cascade;
-create table orders (
-                       id           bigserial primary key,
-                       user_id      bigint REFERENCES users(id)
-);
+drop table if exists orders cascade;
+create table orders (id bigserial, user_id bigint not null, price numeric(8, 2) not null, primary key(id), constraint fk_user_id foreign key (user_id) references users (id));
 
-drop table if exists cascade;
-create table order_items(
-                            id           bigserial primary key,
-                            book_id      bigint REFERENCES books (id),
-                            order_id     bigint REFERENCES orders (id) ON UPDATE cascade ON DELETE cascade ,
-                            price        int,
-                            count        int
-);
+drop table if exists orders_items cascade;
+create table orders_items (id bigserial, order_id bigint not null, book_id bigint not null, quantity int, price numeric(8, 2), primary key(id), constraint fk_book_id foreign key (book_id) references books (id), constraint fk_order_id foreign key (order_id) references orders (id));
