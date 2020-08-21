@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/api/v1/books")
 @AllArgsConstructor
 public class BookRestController {
-    private BookService bookService;
+    private final BookService bookService;
 
     @GetMapping
     public List<Book> getAllBooks() {
