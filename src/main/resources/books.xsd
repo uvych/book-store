@@ -1,0 +1,36 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://some.com/ws/bookstore"
+	targetNamespace="http://some.com/ws/bookstore" elementFormDefault="qualified">
+	
+	<xs:complexType name="soapBook">
+		<xs:sequence>
+			<xs:element name="id" type="xs:long"/>
+			<xs:element name="title" type="xs:string"/>
+			<xs:element name="description" type="xs:string"/>
+			<xs:element name="price" type="xs:int"/>
+			<xs:element name="publishYear" type="xs:int"/>
+			<xs:element name="genre" type="tns:genre"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:simpleType name="genre">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="FANTASY"/>
+			<xs:enumeration value="FICTION"/>
+			<xs:enumeration value="DETECTIVE"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name="getBooksRequest">
+		<xs:complexType>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="getBooksResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="book" type="tns:soapBook"  minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>
