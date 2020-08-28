@@ -1,3 +1,36 @@
+create table users (
+                       id                    bigserial,
+                       username              varchar(30) not null,
+                       password              varchar(80) not null,
+                       email                 varchar(50) unique,
+                       primary key (id)
+);
+
+create table roles (
+                       id                    serial,
+                       name                  varchar(50) not null,
+                       primary key (id)
+);
+
+CREATE TABLE users_roles (
+                             user_id               bigint not null,
+                             role_id               int not null,
+                             primary key (user_id, role_id),
+                             foreign key (user_id) references users (id),
+                             foreign key (role_id) references roles (id)
+);
+
+insert into roles (name)
+values
+('ROLE_USER'), ('ROLE_ADMIN'), ('DELETE_USERS_PERMISSION');
+
+insert into users (username, password, email)
+values
+('Bob Johnson', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'bob_johnson@gmail.com'),
+('John Johnson', '$2a$04$Fx/SX9.BAvtPlMyIIqqFx.hLY2Xp8nnhpzvEEVINvVpwIPbA3v/.i', 'john_johnson@gmail.com');
+
+insert into users_roles (user_id, role_id) values (1, 1), (1, 3);
+
 create table books (id bigserial primary key, title varchar(255), description varchar(5000), price numeric(8, 2), publish_year int , genre varchar(255));
 insert into books (title, description, price, publish_year, genre) values
 ('Harry Potter 1', 'Description 1', 300.0, 2000, 'FANTASY'),
@@ -11,3 +44,18 @@ insert into books (title, description, price, publish_year, genre) values
 ('LOTR 2', 'Description 9', 900.0, 2004, 'DETECTIVE'),
 ('LOTR 3', 'Description 10', 600.0, 2001, 'DETECTIVE'),
 ('Hobbit', 'Description 11', 500.0, 2001, 'SCIENCE_FICTION');
+
+drop table if exists cascade;
+create table orders (
+                       id           bigserial primary key,
+                       user_id      bigint REFERENCES users(id)
+);
+
+drop table if exists cascade;
+create table order_items(
+                            id           bigserial primary key,
+                            book_id      bigint REFERENCES books (id),
+                            order_id     bigint REFERENCES orders (id) ON UPDATE cascade ON DELETE cascade ,
+                            price        int,
+                            count        int
+);

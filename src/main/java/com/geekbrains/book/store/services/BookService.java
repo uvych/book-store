@@ -1,9 +1,8 @@
 package com.geekbrains.book.store.services;
 
 import com.geekbrains.book.store.entities.Book;
-import com.geekbrains.book.store.entities.Genre;
+import com.geekbrains.book.store.exceptions.ResourceNotFoundException;
 import com.geekbrains.book.store.repositories.BookRepository;
-import com.geekbrains.book.store.repositories.specifications.BookSpecifications;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -51,5 +50,9 @@ public class BookService {
             }
         }
         return paramString.toString();
+    }
+
+    public Book findById(Long id){
+        return bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Не найдена кинга"));
     }
 }
