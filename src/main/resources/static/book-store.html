@@ -29,18 +29,4 @@
       </table>
   </div>
   </body>
-
-	<script>
-		var app = angular.module('app', []);
-		app.controller('booksController', function($scope, $http) {
-		  fillTable = function() {
-              $http.get("http://localhost:8189/store/books/rest")
-              .then(function(response) {
-                $scope.BooksList = response.data;
-              });
-		  };
-
-		  fillTable();
-		});
-	</script>
 </html>

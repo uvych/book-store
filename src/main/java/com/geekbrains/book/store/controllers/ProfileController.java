@@ -18,7 +18,7 @@ public class ProfileController {
 
     @GetMapping
     public String showProfilePage(Model model, Principal principal) {
-        User user = userService.findByUsername(principal.getName());
+        User user = userService.findByUsername(principal.getName()).get();
         model.addAttribute("fullName", user.getUsername());
         model.addAttribute("email", user.getEmail());
         return "profile-page";
