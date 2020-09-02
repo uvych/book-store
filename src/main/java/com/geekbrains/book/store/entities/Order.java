@@ -29,6 +29,10 @@ public class Order {
     @Column(name = "price")
     private BigDecimal price;
 
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private Order.Status status;
+
     public Order(User user, Cart cart) {
         this.user = user;
         this.items = new ArrayList<>();

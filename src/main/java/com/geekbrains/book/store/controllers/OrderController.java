@@ -35,7 +35,9 @@ public class OrderController {
     public String confirmOrder(Principal principal) {
         User user = userService.findByUsername(principal.getName()).get();
         Order order = new Order(user, cart);
+        order.setStatus(Order.Status.IN_PROCESS);
         order = orderService.saveOrder(order);
+        rabbitMqService.sendMessage( order.getId().intValue());
         return order.getId() + " " + order.getPrice();
     }
 }

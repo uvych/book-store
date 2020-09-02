@@ -28,5 +28,12 @@ public class OrderService {
     public Order saveOrder(Order order) {
         return orderRepository.save(order);
     }
+
+    public Order updateOrderStatus(Long id,Order.Status status){
+        Order order=findById(id);
+        order.setStatus(status);
+        saveOrder(order);
+        return order;
+    }
 }
 
